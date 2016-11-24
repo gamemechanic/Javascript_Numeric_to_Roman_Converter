@@ -1,0 +1,83 @@
+function convertToRoman(num) {
+  var tensArr = [];
+  var singleArr = [];
+  var hundArr = [];
+  var finalArr = [];
+  var tens;
+  var hundreds;
+  var thousands;
+  var remTens;
+  var remHund;
+  var remThous;
+  var finalNum;
+  //var arrMain = ["I","V","X","L","C","D","M"];
+  var arr = ["o", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM", "M"];
+  //tens function start
+  function tensFun(num) {
+    tens = Math.floor(num / 10);
+    tensArr.push(arr[tens + 9]);
+    finalArr.push(tensArr);
+    remTens = num % 10;
+    if (remTens !== 0) {
+      singleArr.push(arr[remTens]);
+      finalArr.push(singleArr);
+      finalNum = finalArr.join("");
+    } else {
+      tensArr = finalArr;
+      finalNum = finalArr.join("");
+    }
+    return finalArr;
+  }
+  //end tensFun
+  //start hundFun
+  function hundFun(num) {
+    hundreds = Math.floor(num / 100);
+    hundArr.push(arr[hundreds + 18]);
+    finalArr.push(hundArr);
+    remHund = num % 100;
+    if (remHund > 10) {
+      var result1 = tensFun(remHund);
+      finalArr.push(result1);
+      finalNum = finalArr.join("");
+    } else if (1 < remHund < 10) {
+      finalArr.push(arr[remHund]);
+      finalNum = finalArr.join("");
+
+    }
+    if (remHund === 0) {
+      finalArr = hundArr;
+      finalNum = finalArr.join("");
+    }
+    return finalArr;
+  }
+  //end hundFun
+  if ((num / 1000) < 1 && (num / 100) < 1 && (num / 10) <= 1) {
+    finalNum = arr[num];
+  } else if ((num / 1000) < 1 && (num / 100) <= 1 && (num / 10) > 1) {
+    finalNum = (tensFun(num)).join("");
+  } else if ((num / 1000) <= 1 && (num / 100) > 1) {
+    finalNum = (hundFun(num).join(""));
+  } else if ((num / 1000) > 1) {
+    remThous = num % 1000;
+    thousands = Math.floor(num / 1000);
+    for (var i = 1; i <= thousands; i++) {
+      finalArr.push("M");
+    }if (remThous === 0) {
+      console.log("here");
+      finalNum = finalArr.join("");
+    } else if (remThous <= 10) {
+      console.log("here2");
+      finalArr.push(arr[remThous]);
+      finalNum = finalArr.join("");
+    } else if (remThous <= 100) {
+      finalArr.push(tensFun(remThous));
+      finalNum = finalArr.join("");
+    }else if (remThous < 1000){
+      finalArr.push(hundFun(remThous));
+      finalNum = finalArr.join("");
+    }
+  }
+  return finalNum;
+}
+
+convertToRoman(3023);
